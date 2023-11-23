@@ -1,0 +1,55 @@
+name: Create Issues on First Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_issues:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Check for open issues
+      id: check_issues
+      run: |
+        ISSUES=$(curl -H "Authorization: token ${{ secrets.INSPER_BOT }}" \
+                     -H "Accept: application/vnd.github.v3+json" \
+                     https://api.github.com/repos/${{ github.repository }}/issues?state=all)
+        COUNT=$(echo "$ISSUES" | jq '. | length')
+        if [[ "$COUNT" -eq 0 ]]; then
+          echo "::set-output name=has_issues::false"
+        else
+          echo "::set-output name=has_issues::true"
+        fi
+      continue-on-error: true
+
+    - name: Create Issues
+      if: steps.check_issues.outputs.has_issues == 'false'
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.INSPER_BOT}}
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          const util = require('util');
+          const issueDir = '.github/issues'; // Replace with the actual directory path
+
+          const sleep = util.promisify(setTimeout);
+
+          const files = fs.readdirSync(issueDir).filter(file => path.extname(file) === '.md').sort();
+
+          for (const file of files) {
+            const issueTitle = path.basename(file, '.md');
+            const issueBody = fs.readFileSync(path.join(issueDir, file), 'utf8');
+            const issue = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body: issueBody
+            };
+            await github.issues.create(issue);
+            await sleep(2000);  // Sleep for 2 seconds
+          }
