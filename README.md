@@ -10,13 +10,13 @@ Mais detalhes no site da disciplina:
 
 Integrantes:
 
-- Nome 
-- Nome
-- Nome
+- João Antônio Gomes
+- Lucas Guergel
+- Pedro Fracassi
 
 Nome da marca:
 
-- Nome e logo?
+- Powercycle
 
 ## Interface
 
@@ -72,4 +72,9 @@ Detalhes da terceira interação da proposta de interface:
 - Imagem da proposta
 - Imagem da proposta no LCD
 - Vídeo 
+
+
+### Fotos da interface
+
+<img src="https://github.com/insper-classroom/23b-emb-aps2-powercycle_ap2/img/Tela1.jpeg" alt="Tela1">
 
