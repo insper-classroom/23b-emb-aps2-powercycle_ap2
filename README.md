@@ -38,6 +38,7 @@ Descricão da primeira proposta da interface:
 ### Proposta UX 2 - B
 
 > - Especifica e justifica quais vão ser as fontes (e tamanhos) a serem usadas na interface.
+A fonte usada na interface foi a Proxima nova, com diferente tamanho, achamos uma boa fonte a ser visualizada mesmo de baixo do sol, as cores quiriamos seguir as cores da logo que eram preto e branco, o fundo é branco as letras são pretas e os sentidos das setas que são marcadores que servem para indicar a velocidade são verdes para quando estão aumentando e vermelho para quando estã diminuindo.
 > - Pega feedback com o Luiz do Fablab e incorpora na interface
 >   - Grava em vídeo a entrevista
 > - Grava um vídeo atualizado explicando o que foi sugerido e o que fizeram para melhorar a interface
@@ -77,4 +78,5 @@ Detalhes da terceira interação da proposta de interface:
 ### Fotos da interface
 
 <img src="https://github.com/insper-classroom/23b-emb-aps2-powercycle_ap2/blob/main/img/Tela1.jpeg" alt="Tela1">
-
+<img src="https://github.com/insper-classroom/23b-emb-aps2-powercycle_ap2/blob/main/img/Tela2.jpeg" alt="Tela2">
+<img src="https://github.com/insper-classroom/23b-emb-aps2-powercycle_ap2/blob/main/img/Tela3.jpeg" alt="Tela3">
