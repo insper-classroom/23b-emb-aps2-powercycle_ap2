@@ -76,5 +76,5 @@ Detalhes da terceira interação da proposta de interface:
 
 ### Fotos da interface
 
-<img src="https://github.com/insper-classroom/23b-emb-aps2-powercycle_ap2/img/Tela1.jpeg" alt="Tela1">
+<img src="https://github.com/insper-classroom/23b-emb-aps2-powercycle_ap2/blob/main/img/Tela1.jpeg" alt="Tela1">
 
