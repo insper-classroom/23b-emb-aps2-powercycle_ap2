@@ -414,7 +414,8 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  ../src/touch/touch.h ../src/config/conf_board.h \
  ../src/ASF/thirdparty/CMSIS/Include/arm_math.h \
  ../src/ASF/thirdparty/CMSIS/Include/core_cm7.h \
- d:\microchip\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\math.h
+ d:\microchip\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\math.h \
+ ../src/logo_horizontal.c
 
 ../src/asf.h:
 
@@ -1271,3 +1272,5 @@ d:\microchip\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\inttypes.
 ../src/ASF/thirdparty/CMSIS/Include/core_cm7.h:
 
 d:\microchip\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\math.h:
+
+../src/logo_horizontal.c:

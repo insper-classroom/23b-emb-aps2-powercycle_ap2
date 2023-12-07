@@ -9,6 +9,7 @@
 #include "touch/touch.h"
 #include "conf_board.h"
 #include "arm_math.h"
+#include "logo_horizontal.c"
 
 /************************************************************************/
 /* LCD / LVGL                                                           */
@@ -221,6 +222,11 @@ void lv_ex_btn_1(void) {
 	label = lv_label_create(btn2);
 	lv_label_set_text(label, "Toggle");
 	lv_obj_center(label);
+
+	lv_obj_t * img = lv_img_create(lv_scr_act());
+	lv_img_set_src(img, &logo_horizontal);
+	lv_obj_align(img, LV_ALIGN_TOP_LEFT, 0, 0);
+
 
 	labelSeconds = lv_label_create(lv_scr_act());
 	lv_obj_align(labelSeconds, LV_ALIGN_TOP_RIGHT, -5 , 5);
