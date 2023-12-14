@@ -172,6 +172,8 @@ extern void vApplicationMallocFailedHook(void) {
 SemaphoreHandle_t xSemaphoreBut_RAMP;
 SemaphoreHandle_t xSemaphoreLED;
 
+QueueHandle_t xQueueSpeed;
+
 /** prototypes */
 void but_callback(void);
 float kmh_to_hz(float vel, float raio);
@@ -203,62 +205,49 @@ static void event_handler(lv_event_t * e) {
 	}
 }
 
-void lv_ex_btn_1(void) {
-	lv_obj_t * label;
+lv_obj_t * lblSpeed;
 
-	lv_obj_t * btn1 = lv_btn_create(lv_scr_act());
-	lv_obj_add_event_cb(btn1, event_handler, LV_EVENT_ALL, NULL);
-	lv_obj_align(btn1, LV_ALIGN_CENTER, 0, -40);
-
-	label = lv_label_create(btn1);
-	lv_label_set_text(label, "Corsi");
-	lv_obj_center(label);
-
-	lv_obj_t * btn2 = lv_btn_create(lv_scr_act());
-	lv_obj_add_event_cb(btn2, event_handler, LV_EVENT_ALL, NULL);
-	lv_obj_align(btn2, LV_ALIGN_CENTER, 0, 40);
-	lv_obj_add_flag(btn2, LV_OBJ_FLAG_CHECKABLE);
-	lv_obj_set_height(btn2, LV_SIZE_CONTENT);
-
-	label = lv_label_create(btn2);
-	lv_label_set_text(label, "Toggle");
-	lv_obj_center(label);
-
+void lv_ex_btn_1() {
 	LV_IMG_DECLARE(logo_horizontal);
 	lv_obj_t * img = lv_img_create(lv_scr_act());
 	lv_img_set_src(img, &logo_horizontal);
 	lv_obj_align(img, LV_ALIGN_TOP_LEFT, 0, 0);
 
+	lblSpeed = lv_label_create(lv_scr_act());
+	lv_obj_align(lblSpeed, LV_ALIGN_LEFT_MID, 100, 0);
+	lv_obj_set_style_text_font(lblSpeed, &lv_font_montserrat_46, LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(lblSpeed, lv_color_black(), LV_STATE_DEFAULT);
+	lv_label_set_text_fmt(lblSpeed, "%d", 0);
 
 	labelSeconds = lv_label_create(lv_scr_act());
 	lv_obj_align(labelSeconds, LV_ALIGN_TOP_RIGHT, -5 , 5);
 	lv_obj_set_style_text_font(labelSeconds, &lv_font_montserrat_14, LV_STATE_DEFAULT);
-	lv_obj_set_style_text_color(labelSeconds, lv_color_white(), LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelSeconds, lv_color_black(), LV_STATE_DEFAULT);
 	lv_label_set_text_fmt(labelSeconds, "%02d", 0);
 
 	labelDots1 = lv_label_create(lv_scr_act());
 	lv_obj_align_to(labelDots1, labelSeconds, LV_ALIGN_OUT_LEFT_TOP, 25, 0);
 	lv_obj_set_style_text_font(labelDots1, &lv_font_montserrat_14, LV_STATE_DEFAULT);
-	lv_obj_set_style_text_color(labelDots1, lv_color_white(), LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelDots1, lv_color_black(), LV_STATE_DEFAULT);
 	lv_label_set_text(labelDots1, ":");
 
 	labelMinutes = lv_label_create(lv_scr_act());
 	lv_obj_align_to(labelMinutes, labelDots1, LV_ALIGN_OUT_LEFT_TOP, 10, 0);
 	lv_obj_set_style_text_font(labelMinutes, &lv_font_montserrat_14, LV_STATE_DEFAULT);
-	lv_obj_set_style_text_color(labelMinutes, lv_color_white(), LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelMinutes, lv_color_black(), LV_STATE_DEFAULT);
 	lv_label_set_text_fmt(labelMinutes, "%02d", 0);
 
 
 	labelDots2 = lv_label_create(lv_scr_act());
 	lv_obj_align_to(labelDots2, labelMinutes, LV_ALIGN_OUT_LEFT_TOP, 25, 0);
 	lv_obj_set_style_text_font(labelDots2, &lv_font_montserrat_14, LV_STATE_DEFAULT);
-	lv_obj_set_style_text_color(labelDots2, lv_color_white(), LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelDots2, lv_color_black(), LV_STATE_DEFAULT);
 	lv_label_set_text(labelDots2, ":");
 
 	labelHours = lv_label_create(lv_scr_act());
 	lv_obj_align_to(labelHours, labelDots2, LV_ALIGN_OUT_LEFT_TOP, 15, 0);
 	lv_obj_set_style_text_font(labelHours, &lv_font_montserrat_14, LV_STATE_DEFAULT);
-	lv_obj_set_style_text_color(labelHours, lv_color_white(), LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelHours, lv_color_black(), LV_STATE_DEFAULT);
 	lv_label_set_text_fmt(labelHours, "%02d", 22);
 }
 
@@ -268,7 +257,7 @@ void lv_ex_btn_1(void) {
 
 static void task_lcd(void *pvParameters) {
 	int px, py;
-
+	
 	lv_ex_btn_1();
 
 	for (;;)  {
@@ -319,9 +308,11 @@ static void task_simulador(void *pvParameters) {
 			vel = 5;
 			printf("[SIMU] CONSTANTE: %d \n", (int) (10*vel));
 		}
+		
+		lv_label_set_text_fmt(lblSpeed, "%d", (int) (10*vel));
 
 		f = kmh_to_hz(vel, RAIO);
-		int t = 965*(1.0/f); //UTILIZADO 965 como multiplicador ao inv�s de 1000
+		int t = 500*(1.0/f); //UTILIZADO 965 como multiplicador ao inv�s de 1000
 							 //para compensar o atraso gerado pelo Escalonador do freeRTOS
 		delay_ms(t);
 	}
@@ -540,6 +531,9 @@ int main(void) {
 	/* Attempt to create a semaphore. */
 	xSemaphoreLED = xSemaphoreCreateBinary();
 	if (xSemaphoreLED == NULL)	 printf("falha em criar o semaforo \n");
+	
+	xQueueSpeed = xQueueCreate(10, sizeof(int));
+	if (xQueueSpeed == NULL) printf("Falha ao criar fila");
 
 	/* Attempt to create a semaphore. */
 	xSemaphoreSeg = xSemaphoreCreateBinary();

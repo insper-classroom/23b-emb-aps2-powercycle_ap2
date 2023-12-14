@@ -307,7 +307,7 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 #define LV_FONT_MONTSERRAT_40 0
 #define LV_FONT_MONTSERRAT_42 0
 #define LV_FONT_MONTSERRAT_44 0
-#define LV_FONT_MONTSERRAT_46 0
+#define LV_FONT_MONTSERRAT_46 1
 #define LV_FONT_MONTSERRAT_48 0
 
 /*Demonstrate special features*/
