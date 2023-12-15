@@ -33,6 +33,7 @@ lv_obj_t * labelDots1;
 lv_obj_t * labelMinutes;
 lv_obj_t * labelDots2;
 lv_obj_t * labelSeconds;
+lv_obj_t * labelAcceleration;
 
 TimerHandle_t xTimer;
 
@@ -218,7 +219,13 @@ void lv_ex_btn_1() {
 	lv_obj_set_style_text_font(lblSpeed, &lv_font_montserrat_46, LV_STATE_DEFAULT);
 	lv_obj_set_style_text_color(lblSpeed, lv_color_black(), LV_STATE_DEFAULT);
 	lv_label_set_text_fmt(lblSpeed, "%d", 0);
-
+	
+	labelAcceleration = lv_label_create(lv_scr_act());
+	lv_obj_align(labelAcceleration, LV_ALIGN_RIGHT_MID, -30, 0);
+	lv_obj_set_style_text_font(labelAcceleration, &lv_font_montserrat_46, LV_STATE_DEFAULT);
+	lv_obj_set_style_text_color(labelAcceleration, lv_color_black(), LV_STATE_DEFAULT);
+	lv_label_set_text_fmt(labelAcceleration, "%d", 0);
+	
 	labelSeconds = lv_label_create(lv_scr_act());
 	lv_obj_align(labelSeconds, LV_ALIGN_TOP_RIGHT, -5 , 5);
 	lv_obj_set_style_text_font(labelSeconds, &lv_font_montserrat_14, LV_STATE_DEFAULT);
@@ -274,10 +281,10 @@ static void task_simulador(void *pvParameters) {
 	pio_set_output(PIOC, PIO_PC31, 1, 0, 0);
 
 	float vel = VEL_MAX_KMH;
+	float vel_ant = VEL_MAX_KMH;
 	float f;
 	int ramp_up = 1;
 	int ramp_status = 0;
-
 	while(1){
 
 		if (xSemaphoreTake(xSemaphoreBut_RAMP, 1)) {
@@ -292,14 +299,17 @@ static void task_simulador(void *pvParameters) {
 		if(ramp_status == 1){
 			if (ramp_up) {
 				printf("[SIMU] ACELERANDO: %d \n", (int) (10*vel));
+				vel_ant = vel;
 				vel += 0.5;
 				} else {
 				printf("[SIMU] DESACELERANDO: %d \n",  (int) (10*vel));
+				vel_ant = vel;
 				vel -= 0.5;
 			}
 
 			if (vel >= VEL_MAX_KMH)
 			ramp_up = 0;
+			
 			else if (vel <= VEL_MIN_KMH)
 			ramp_up = 1;
 		}
@@ -308,6 +318,18 @@ static void task_simulador(void *pvParameters) {
 			vel = 5;
 			printf("[SIMU] CONSTANTE: %d \n", (int) (10*vel));
 		}
+		
+		
+		if (vel_ant < vel){
+			lv_label_set_text(labelAcceleration, LV_SYMBOL_UP);
+		}
+		else if (vel_ant > vel){
+			lv_label_set_text(labelAcceleration, LV_SYMBOL_DOWN);
+		}
+		else if (vel_ant == vel){
+			lv_label_set_text(labelAcceleration, " ");
+		}
+		
 		
 		lv_label_set_text_fmt(lblSpeed, "%d", (int) (10*vel));
 
